@@ -15,7 +15,8 @@
   "keywords": [
     "api",
     "node",
-    "express"
+    "express",
+    "api"
   ],
   "author": "Lambda School",
   "bugs": {

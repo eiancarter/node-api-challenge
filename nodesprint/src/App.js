@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-import ProjecCard from './ProjectCard';
+import ProjectCard from './ProjectCard';
+import ProjectForm from './ProjectForm';
 
 function App() {
 
@@ -22,12 +23,13 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        Welcome
+        Sprint Project List 
+        <ProjectForm />
       </header>
       <div>
         {projects.map(project => {
           return(
-           <ProjecCard 
+           <ProjectCard 
             key={project.id}
             name={project.name}
             description={project.description}

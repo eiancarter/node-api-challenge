@@ -34,7 +34,7 @@ router.post("/:id/actions", (req, res) => {
 
 router.get("/", (req, res) => {
     console.log("headers", req.headers);
-    Projects.get(req.query)
+    Projects.get()
         .then(projects => {
             res.status(200).json(projects);
         })
@@ -45,7 +45,13 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
-    res.status(200).json(req.project);
+    Projects.get(req.params.id)
+        .then(project => {
+            res.status(200).json(project);
+        })
+        .catch(error => {
+            console.log(error);
+        })
 });
 
 router.get("/:id/actions", (req, res) => {
@@ -61,7 +67,7 @@ router.get("/:id/actions", (req, res) => {
         })
 })
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", validateProjectId, (req, res) => {
     Projects.remove(req.params.id)
         .then(count => {
             if(count > 0) {
@@ -79,18 +85,30 @@ router.delete("/:id", (req, res) => {
 router.put("/:id", (req, res) => {
     const changes = req.body;
     Projects.update(req.params.id, changes)
-        .then(count => {
-            if(count > 0) {
-                res.status(200).json(count);
-            } else {
-                res.status(404).json({ message: "the project cannot be foudn" })
-            }
+        .then( project => {
+            res.status(200).json(project);
         })
         .catch(error => {
             console.log(error);
             res.status(500).json({ message: "error updating project" })
         });
 });
+
+function validateProjectId(req, res, next) {
+    Projects.get(req.params.id)
+    .then(project => {
+      if(project) {
+        req.project = project;
+        next();
+      } else {
+        res.status(400).json({ message: "invalid project id" });
+      }
+    })
+    .catch(error => {
+      console.log(error)
+      res.status(500).json({ message: "error retrieving that project id" })
+    })
+}
 
 
 module.exports = router;

@@ -3,8 +3,7 @@ const Actions = require("./actionModel");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-    const pagination = req.query;
-    Actions.get(pagination)
+    Actions.get()
         .then(actions => {
             res.status(200).json(actions)
         })
@@ -29,6 +28,13 @@ router.get("/:id", (req, res) => {
                 message: "error retrieving that action"
             })
         })
+});
+
+router.post('/:id', (req, res) => {
+    const newAction = req.body;
+    actions.insert(newAction)
+      .then(() => res.status(201))
+      .catch(err => console.log(err));
 });
 
 router.delete("/:id", (req, res) => {

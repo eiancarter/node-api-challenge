@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
+import ProjecCard from './ProjectCard';
 
 function App() {
 
@@ -26,7 +27,12 @@ function App() {
       <div>
         {projects.map(project => {
           return(
-            <h2>{project.name}</h2>
+           <ProjecCard 
+            key={project.id}
+            name={project.name}
+            description={project.description}
+            completed={project.completed}
+          />
           )
         })}
       </div>

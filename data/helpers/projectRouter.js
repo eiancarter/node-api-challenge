@@ -6,7 +6,7 @@ const Actions = require("./actionModel");
 //this one needs middleware to confirm project_id exists
 
 //Posting a new project
-router.post("/", (req, res) => {
+router.post("/", validateProject, (req, res) => {
     Projects.insert(req.body)
         .then(project => {
             res.status(201).json(project)
@@ -109,6 +109,18 @@ function validateProjectId(req, res, next) {
       res.status(500).json({ message: "error retrieving that project id" })
     })
 }
+
+function validateProject(req, res, next) {
+    const body = req.body;
+    if (body && body.name) {
+      next();
+    } else if (!body) {
+      res.status(400).json({ message: "missing project data"})
+    } else {
+      res.status(400).json({ message: "missing name or description field"})
+    }
+  }
+  
 
 
 module.exports = router;
